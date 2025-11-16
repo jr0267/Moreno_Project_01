@@ -1,6 +1,6 @@
 **Project Name**: Moreno_Project_01  
-**PI**:   
-**Analyst**:   
+**PI**: Camille Hachheimer
+**Analyst**: Mauricio Moreno  
 **CIDA drive Location**:   
 **GitHub Location**:   
 

@@ -5,26 +5,73 @@ date: "2025-11-16"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(CIDAtools)
+library(tidyverse)
+library(dplyr)
+library(knitr)
+library(kableExtra)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r, include=FALSE, warning=FALSE}
+# from the parent directory where you want the folder to live
+create_project(ProjectName = "Moreno_Project_01")
 ```
 
-## Including Plots
+```{r}
+lead <- readr::read_csv("DataRaw/lead-iq-01.csv", show_col_types = FALSE)
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+# Basic cleaning, treat 999 IQ as missing
+lead <- lead %>%
+  mutate(IQ = if_else(IQ == 999, NA_real_, as.numeric(IQ)),
+         Smelter = factor(Smelter)        
+)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Overall description 
+
+The dataset contains `r nrow(lead)` children. The mean IQ for children living near the smelter is `r round(mean(lead$IQ[lead$Smelter == "Near"], na.rm = TRUE), 1)`, and for those living far from the smelter is
+`r round(mean(lead$IQ[lead$Smelter == "Far"], na.rm = TRUE), 1)`.
+
+\newpage
+```{r, warning=FALSE}
+# IQ levels by location status
+ggplot(lead, aes(x = Smelter, y = IQ)) +
+geom_boxplot() +
+  labs(x = "Location status relative to smelter",
+       y = "IQ score",
+       title = "Child IQ by smelter proximity") +
+  theme_minimal()
+```
+
+The boxplot shows how IQ scores vary between children living near versus far from the smelter. We can visually compare the medians, spread, and any potential outliers across location status.
+
+\newpage
+```{r}
+iq_summary <- lead %>%
+  group_by(Smelter) %>%
+  summarize(
+    n = sum(!is.na(IQ)),
+    mean_IQ = mean(IQ, na.rm = TRUE),
+    sd_IQ   = sd(IQ, na.rm = TRUE),
+    .groups = "drop"
+)
+
+kable(
+  iq_summary,
+  caption = "Summary of IQ by smelter proximity",
+  digits = 1
+) %>%
+  kable_styling(
+    full_width = FALSE, 
+    position   = "center",
+    font_size  = 14
+  )
+```
+
+The table above summarizes IQ levels by smelter location status. For each group (near vs. far), it reports the number of non-missing IQ observations, the mean IQ, and the standard deviation. Together with the boxplot, this lets us see whether IQ tends to be lower or higher among children living near the smelter and how variable the scores are in each group.
+
+
+
+
