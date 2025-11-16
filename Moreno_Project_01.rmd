@@ -22,9 +22,9 @@ create_project(ProjectName = "Moreno_Project_01")
 ```{r}
 lead <- readr::read_csv("DataRaw/lead-iq-01.csv", show_col_types = FALSE)
 
-# Basic cleaning, treat 999 IQ as missing
+# Correct miscoded IQ of 999 to 99
 lead <- lead %>%
-  mutate(IQ = if_else(IQ == 999, NA_real_, as.numeric(IQ)),
+  mutate(IQ = if_else(IQ == 999, 99, as.numeric(IQ)),
          Smelter = factor(Smelter)        
 )
 ```
