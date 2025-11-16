@@ -49,6 +49,7 @@ The boxplot shows how IQ scores vary between children living near versus far fro
 
 \newpage
 ```{r}
+# Create summary table
 iq_summary <- lead %>%
   group_by(Smelter) %>%
   summarize(
