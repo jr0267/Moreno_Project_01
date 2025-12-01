@@ -14,7 +14,7 @@ library(knitr)
 library(kableExtra)
 ```
 
-```{r, include=FALSE, warning=FALSE}
+```{r, include=FALSE, warning=FALSE, eval=FALSE}
 # from the parent directory where you want the folder to live
 create_project(ProjectName = "Moreno_Project_01")
 ```
