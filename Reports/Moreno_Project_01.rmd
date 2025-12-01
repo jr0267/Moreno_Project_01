@@ -1,7 +1,7 @@
 ---
 title: "Moreno_Project_01"
 author: "Mauricio Moreno"
-date: "2025-11-16"
+date: "2025-11-30"
 output: pdf_document
 ---
 
@@ -20,7 +20,7 @@ create_project(ProjectName = "Moreno_Project_01")
 ```
 
 ```{r}
-lead <- readr::read_csv("DataRaw/lead-iq-01.csv", show_col_types = FALSE)
+lead <- readr::read_csv("../DataRaw/lead-iq-01.csv", show_col_types = FALSE)
 
 # Correct miscoded IQ of 999 to 99
 lead <- lead %>%
